@@ -1,24 +1,38 @@
-var appendCats = 
-	$.ajax({
-	dataType: "json",
-	url: "https://ga-cat-rescue.herokuapp.com/api/cats",
-	success: function(data){
-	var list = $("ul#cats");
-		for (var i=0; i<data.length; i++){
-			list.append("<li>"+data[i].name+"</li>");
-		}
-	}
+var adoptACat = $.get("https://ga-cat-rescue.herokuapp.com/api/cats").done(function(adoptACat) {
+    
+	var getCat = document.getElementById("cats");
+        
+    function adoptACatDance(){
+        for (i = 0; i < adoptACatAll.length; i++ ) {
+        var li = document.createElement("li");
+        var tn = document.createTextNode(adoptACatAll[i]); 
+        getCat.appendChild(li);
+        li.appendChild(tn);
+        }
+    }
+
+    var adoptACatParsed = JSON.parse(adoptACat);
+    var adoptACatAll = [];
+       for (var i = 0; i < adoptACatParsed.length; i++) {
+        adoptACatAll.push(adoptACatParsed[i].name);
+    }
+    
+    adoptACatDance();
+
+$("#new-cat").click(function(e) {
+
+    var name = $('#cat-name').val();
+    var note = $('#cat-note').val();
+
+    $.ajax ({
+    	type: "POST",
+        url: "https://ga-cat-rescue.herokuapp.com/api/cats",
+        data: JSON.stringify({ 'name' : name, 'note' : note}),
+        dataType: "json"
+        }).done(function(addCats) {
+        });
+    });
+
+    e.preventDefault();
+
 });
-
-var addCats = 
-	$.ajax({
-	dataType: "json",
-	url: "https://ga-cat-rescue.herokuapp.com/api/cats",
-	success: function(data){
-	var newName = $("#cat-name").val();
-	var list = $("ul#cats");
-	list.append("<li>"+newName+"</li>");
-	}
-});
-
-
